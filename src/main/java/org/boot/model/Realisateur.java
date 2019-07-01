@@ -13,7 +13,6 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 
 import org.boot.jsonView.JsonViews;
-import org.boot.jsonView.JsonViews.Common;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -25,11 +24,11 @@ public class Realisateur {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqRealisateur")
 	@Column(name = "id_realisateur")
 	private Integer id;
-	@JsonView(Common.class)
+	@JsonView(JsonViews.FilmAvecRealisateur.class)
 	@Column(name = "prenom_realisateur", length = 200)
 	private String prenom;
 	@Column(name = "nom_realisateur", length = 200)
-	@JsonView(Common.class)
+	@JsonView(JsonViews.FilmAvecRealisateur.class)
 	private String nom;
 	@Version
 	private int version;

@@ -41,6 +41,7 @@ public class Film {
 	private Set<Article> articles;
 	@Version
 	private int version;
+	@JsonView(JsonViews.FilmAvecRealisateur.class)
 	@OneToMany(mappedBy="key.film")
 	private Set<FilmRealisateur> realisateurs;
 	

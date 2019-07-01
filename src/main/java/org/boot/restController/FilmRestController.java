@@ -3,6 +3,7 @@ package org.boot.restController;
 import java.util.List;
 import java.util.Optional;
 
+import org.boot.jsonView.JsonViews;
 import org.boot.jsonView.JsonViews.Common;
 import org.boot.model.Film;
 import org.boot.repository.FilmRepository;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -25,14 +25,14 @@ public class FilmRestController {
 	@Autowired
 	private FilmRepository filmRepository;
 	
-	@JsonView(Common.class)
+	@JsonView(JsonViews.FilmAvecRealisateur.class)
 	@GetMapping(value = { "", "/" })
 	public ResponseEntity<List<Film>> findAll() {
 		return list();
 	}
 	
 	private ResponseEntity<List<Film>> list() {
-		return new ResponseEntity<List<Film>>(filmRepository.findAll(), HttpStatus.OK);
+		return new ResponseEntity<List<Film>>(filmRepository.findAllCustom(), HttpStatus.OK);
 	}
 	
 	@JsonView(Common.class)
@@ -43,6 +43,16 @@ public class FilmRestController {
 	
 	public  ResponseEntity<List<Film>> findSome(String titre) {
 		return new ResponseEntity<List<Film>>(filmRepository.findByTitreIgnoreCaseContaining(titre) , HttpStatus.OK);
+	}
+	
+	@JsonView(Common.class)
+	@GetMapping("/searchFilmR/{realisateur}")
+	public ResponseEntity<List<Film>> searchFilmR(@PathVariable (name="realisateur") String r) {
+		return findSomeR(r.toLowerCase());
+	}
+	
+	public  ResponseEntity<List<Film>> findSomeR(String r) {
+		return new ResponseEntity<List<Film>>(filmRepository.findAllCustom(r) , HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{id}")
