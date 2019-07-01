@@ -8,9 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -18,20 +15,29 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
+import org.boot.jsonView.JsonViews;
+import org.boot.jsonView.JsonViews.Common;
+
+import com.fasterxml.jackson.annotation.JsonView;
+
 @Entity
 @Table(name = "film")
 public class Film {
 	@Id
 	@SequenceGenerator(name = "seqFilm", sequenceName = "seq_film", initialValue = 100, allocationSize = 1)
 	@GeneratedValue(generator = "seqFilm", strategy = GenerationType.SEQUENCE)
+	@JsonView(Common.class)
 	@Column(name = "id_film")
 	private Integer id;
+	@JsonView(Common.class)
 	@Column(name = "titre", length = 150)
 	private String titre;
 	@Column(name = "date_sortie")
 	@Temporal(TemporalType.DATE)
+	@JsonView(Common.class)
 	private Date dateSortie;
 	@OneToMany(mappedBy = "film")
+	@JsonView(JsonViews.FilmAvecArticle.class)
 	private Set<Article> articles;
 	@Version
 	private int version;
