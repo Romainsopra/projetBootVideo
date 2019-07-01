@@ -19,6 +19,11 @@ public class JsonViews {
 
 	}
 	
+	public static class FilmAvecArticle extends Common {
+
+	}
+	
+	
 	
 	
 }
