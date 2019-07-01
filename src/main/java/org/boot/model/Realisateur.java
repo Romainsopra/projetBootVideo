@@ -1,19 +1,21 @@
 package org.boot.model;
 
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
+
+import org.boot.jsonView.JsonViews;
+import org.boot.jsonView.JsonViews.Common;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
 @Table(name = "realisateur")
@@ -23,13 +25,16 @@ public class Realisateur {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqRealisateur")
 	@Column(name = "id_realisateur")
 	private Integer id;
+	@JsonView(Common.class)
 	@Column(name = "prenom_realisateur", length = 200)
 	private String prenom;
 	@Column(name = "nom_realisateur", length = 200)
+	@JsonView(Common.class)
 	private String nom;
 	@Version
 	private int version;
 	@OneToMany(mappedBy = "key.realisateur")
+	@JsonView(JsonViews.RealisateurAvecFilm.class)
 	private Set<FilmRealisateur> films;
 
 	public Realisateur() {
