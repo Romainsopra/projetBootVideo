@@ -1,6 +1,7 @@
 package org.boot.restController;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.boot.jsonView.JsonViews.Common;
 import org.boot.model.Film;
@@ -8,7 +9,9 @@ import org.boot.repository.FilmRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,13 +36,24 @@ public class FilmRestController {
 	}
 	
 	@JsonView(Common.class)
-	@GetMapping(value = {"/searchFilm"})
-	public ResponseEntity<List<Film>> searchFilm(@RequestParam (name="titre") String titre) {
+	@GetMapping("/searchFilm/{titre}")
+	public ResponseEntity<List<Film>> searchFilm(@PathVariable (name="titre") String titre) {
 		return findSome(titre);
 	}
 	
 	public  ResponseEntity<List<Film>> findSome(String titre) {
 		return new ResponseEntity<List<Film>>(filmRepository.findByTitreIgnoreCaseContaining(titre) , HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> Delete(@PathVariable (name="id") Integer id) {
+		
+		Optional<Film> opt = filmRepository.findById(id);
+		if (opt.isPresent()) {
+			filmRepository.deleteById(id);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
 }

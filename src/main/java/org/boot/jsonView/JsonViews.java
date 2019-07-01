@@ -23,6 +23,10 @@ public class JsonViews {
 
 	}
 	
+	public static class RealisateurAvecFilm extends Common {
+
+	}
+	
 	
 	
 	
